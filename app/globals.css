@@ -136,7 +136,7 @@ body {
   }
 }
 
-/* Subject: portrait anchored at bottom (z-index: 2) seamlessly blending with site */
+/* Subject: portrait anchored at bottom (z-index: 2) as crisp natural photo */
 .subject {
   position: absolute;
   z-index: 2;
@@ -151,8 +151,6 @@ body {
 .subject-img {
   object-fit: cover;
   object-position: center bottom;
-  -webkit-mask-image: radial-gradient(ellipse 75% 92% at 50% 60%, #000 68%, transparent 100%);
-  mask-image: radial-gradient(ellipse 75% 92% at 50% 60%, #000 68%, transparent 100%);
 }
 
 /* ── Mobile ────────────────────────────────────── */
