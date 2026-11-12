@@ -103,13 +103,13 @@ body {
   }
 }
 
-/* Headline: pure all-black, sitting behind the subject (z-index: 1) */
+/* Headline: pure all-black, sitting behind the subject on desktop starting just below ear */
 .headline {
   position: absolute;
   z-index: 1;
   left: 0;
   right: 0;
-  top: 57%;
+  top: 47%;
   transform: translateY(-50%);
   margin: 0;
   text-align: center;
@@ -136,7 +136,7 @@ body {
   }
 }
 
-/* Subject: portrait anchored at bottom (z-index: 2) as crisp natural photo */
+/* Subject: portrait anchored at bottom (z-index: 2) */
 .subject {
   position: absolute;
   z-index: 2;
@@ -160,12 +160,20 @@ body {
     width: 145vw;
   }
 
+  /* Centered, one line, in front of the image with soft halo so it's not hidden behind him */
   .headline {
-    white-space: normal;
-    top: 64%;
-    font-size: clamp(3.4rem, 21vw, 6.8rem);
-    line-height: 0.88;
+    z-index: 3;
+    white-space: nowrap;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2.3rem, 11vw, 4.2rem);
+    line-height: 1;
     padding-inline: 4vw;
+    text-shadow:
+      0 0 14px rgba(255, 255, 255, 0.95),
+      0 0 28px rgba(255, 255, 255, 0.85);
   }
 }
 

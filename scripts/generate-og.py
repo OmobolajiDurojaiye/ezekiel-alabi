@@ -8,7 +8,7 @@ og = Image.new("RGB", (W, H), (255, 255, 255))
 # Atmospheric soft glow
 glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
 gd = ImageDraw.Draw(glow)
-cx, cy = W // 2, int(H * 0.40)
+cx, cy = W // 2, int(H * 0.38)
 for r in range(350, 0, -5):
     t = 1.0 - (r / 350)
     alpha_val = int(55 * (t ** 1.8))
@@ -28,7 +28,8 @@ bbox = dd.textbbox((0, 0), "Coming Soon", font=font_geist)
 tw = bbox[2] - bbox[0]
 th = bbox[3] - bbox[1]
 tx = (W - tw) // 2
-ty = int(H * 0.52)
+# Raised to start below ear: ~46% of 630 = 290
+ty = int(H * 0.46) - th // 2
 
 # Draw 'Coming Soon' behind portrait in black
 cd = ImageDraw.Draw(og)
