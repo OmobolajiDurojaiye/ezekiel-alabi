@@ -3,11 +3,11 @@ import localFont from "next/font/local";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const headline = localFont({
-  src: "../assets/fonts/InterTight-Variable.ttf",
+const geist = localFont({
+  src: "../assets/fonts/Geist-Variable.ttf",
   display: "swap",
-  variable: "--font-headline",
-  weight: "500",
+  variable: "--font-geist",
+  weight: "100 900",
 });
 
 export const metadata: Metadata = {
@@ -44,7 +44,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={headline.variable}>
+    <html lang="en" className={geist.variable}>
       <body>{children}</body>
     </html>
   );

@@ -39,16 +39,21 @@ export default function Home() {
           alt={site.fullName}
           priority
           className="logo"
-          sizes="280px"
+          sizes="320px"
         />
       </header>
 
       <main className="hero">
         <div className="glow" aria-hidden="true" />
 
-        {/* The single h1 landmark placed in layered depth */}
-        <h1 className="headline">Coming Soon</h1>
+        {/* Layer 1: Behind the subject - "Coming" passes through the back in black */}
+        <div className="headline-layer headline-back" aria-hidden="true">
+          <span className="word-coming">Coming</span>
+          <span className="word-space">&nbsp;</span>
+          <span className="word-soon-ghost">Soon</span>
+        </div>
 
+        {/* Subject: Cutout portrait anchored at z-index 2 */}
         <div className="subject">
           <Image
             src={portrait}
@@ -60,6 +65,13 @@ export default function Home() {
             className="subject-img"
           />
         </div>
+
+        {/* Layer 2: In front of the subject - single H1 landmark with half-white/half-black "Soon" */}
+        <h1 className="headline-layer headline-front">
+          <span className="word-coming-ghost" aria-hidden="true">Coming</span>
+          <span className="word-space" aria-hidden="true">&nbsp;</span>
+          <span className="word-soon-front">Soon</span>
+        </h1>
 
         {/* Visually-hidden descriptive text for screen readers & crawlers */}
         <p className="sr-only">{site.description}</p>

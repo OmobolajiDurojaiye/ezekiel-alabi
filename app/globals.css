@@ -5,14 +5,13 @@
   --color-white: #ffffff;
   --color-pink: #e5a0fd;
   --color-purple: #9900cc;
-  --font-headline: var(--font-headline), ui-sans-serif, system-ui, sans-serif;
+  --font-geist: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
   --pink: #e5a0fd;
   --purple: #9900cc;
   --gradient: linear-gradient(135deg, var(--pink) 0%, var(--purple) 100%);
-  --headline-z: 1; /* Layered depth: behind subject shoulders like reference */
 }
 
 html,
@@ -50,12 +49,12 @@ body {
 .site-header {
   position: fixed;
   inset: 0 auto auto 0;
-  z-index: 10;
+  z-index: 20;
   padding: clamp(24px, 4.5vw, 64px);
 }
 
 .logo {
-  height: clamp(28px, 3.2vw, 44px);
+  height: clamp(32px, 3.6vw, 48px);
   width: auto;
   display: block;
 }
@@ -104,7 +103,7 @@ body {
   }
 }
 
-/* Subject: transparent cutout portrait, bottom-anchored */
+/* Subject: transparent cutout portrait, bottom-anchored at z-index 2 */
 .subject {
   position: absolute;
   z-index: 2;
@@ -121,26 +120,66 @@ body {
   object-position: center bottom;
 }
 
-/* Headline */
-.headline {
+/* ── Layered Headline: Back (z-index 1) and Front (z-index 3) ── */
+.headline-layer {
   position: absolute;
-  z-index: var(--headline-z);
   left: 0;
   right: 0;
-  top: 58%;
+  top: 57%;
   transform: translateY(-50%);
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   white-space: nowrap;
-  font-family: var(--font-headline);
-  font-weight: 500;
-  letter-spacing: -0.045em;
+  font-family: var(--font-geist);
+  font-weight: 600;
+  letter-spacing: -0.04em;
   line-height: 0.9;
   font-size: clamp(3rem, 13vw, 16.5rem);
-  color: #0a0a0a;
-  pointer-events: auto;
   user-select: text;
+  pointer-events: none;
+}
+
+/* Back layer (passes behind Ezekiel's shoulder) */
+.headline-back {
+  z-index: 1;
+  color: #0a0a0a;
   animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.word-coming {
+  color: #0a0a0a;
+}
+
+.word-soon-ghost {
+  visibility: hidden;
+}
+
+/* Front layer (passes in front of Ezekiel's suit) */
+.headline-front {
+  z-index: 3;
+  animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.word-coming-ghost {
+  visibility: hidden;
+}
+
+.word-soon-front {
+  display: inline-block;
+  /* Half-half: white over the suit (left), black over white background (right) */
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #ffffff 36%,
+    #0a0a0a 46%,
+    #0a0a0a 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.25));
 }
 
 @keyframes rise {
@@ -160,17 +199,38 @@ body {
     height: auto;
     width: 145vw;
   }
-  .headline {
-    white-space: normal;
+
+  .headline-layer {
+    flex-direction: column;
     top: 64%;
     font-size: clamp(3.4rem, 21vw, 6.8rem);
     line-height: 0.88;
     padding-inline: 4vw;
   }
+
+  .word-space {
+    display: none;
+  }
+
+  /* On mobile: Soon sits right across the center chest */
+  .word-soon-front {
+    background: linear-gradient(
+      90deg,
+      #0a0a0a 0%,
+      #0a0a0a 18%,
+      #ffffff 30%,
+      #ffffff 70%,
+      #0a0a0a 82%,
+      #0a0a0a 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .headline,
+  .headline-layer,
   .glow {
     animation: none;
   }
