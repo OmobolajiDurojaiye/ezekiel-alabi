@@ -109,9 +109,10 @@ body {
   z-index: 1;
   left: 0;
   right: 0;
+  width: 100%;
   top: 47%;
   transform: translateY(-50%);
-  margin: 0;
+  margin: 0 auto;
   text-align: center;
   white-space: nowrap;
   font-family: var(--font-geist);
@@ -155,25 +156,33 @@ body {
 
 /* ── Mobile ────────────────────────────────────── */
 @media (max-width: 639px) {
+  .site-header {
+    padding: clamp(20px, 5vw, 32px);
+  }
+
+  .logo {
+    height: clamp(26px, 6.2vw, 36px);
+  }
+
   .subject {
     height: auto;
     width: 145vw;
   }
 
-  /* Centered, one line, in front of the image with soft halo so it's not hidden behind him */
+  /* Centered, one line, behind him across the neck/ear level, matching desktop */
   .headline {
-    z-index: 3;
+    z-index: 1;
     white-space: nowrap;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    transform: translate(-50%, -50%);
-    font-size: clamp(2.3rem, 11vw, 4.2rem);
+    top: 60%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    transform: translateY(-50%);
+    font-size: clamp(2.2rem, 11vw, 3.8rem);
     line-height: 1;
-    padding-inline: 4vw;
-    text-shadow:
-      0 0 14px rgba(255, 255, 255, 0.95),
-      0 0 28px rgba(255, 255, 255, 0.85);
+    padding-inline: 3vw;
   }
 }
 
