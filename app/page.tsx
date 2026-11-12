@@ -46,10 +46,14 @@ export default function Home() {
       <main className="hero">
         <div className="glow" aria-hidden="true" />
 
-        {/* The single H1 headline in all black, sitting in depth behind the subject */}
-        <h1 className="headline">Coming Soon</h1>
+        {/* The single H1 headline in all black */}
+        <h1 className="headline">
+          <span className="headline-word">Coming</span>
+          <span className="headline-space"> </span>
+          <span className="headline-word">Soon</span>
+        </h1>
 
-        {/* Subject: Seamlessly blended portrait in front at z-index 2 */}
+        {/* Subject: Seamless portrait anchored at bottom (z-index 2) */}
         <div className="subject">
           <Image
             src={portrait}
