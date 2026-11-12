@@ -46,32 +46,21 @@ export default function Home() {
       <main className="hero">
         <div className="glow" aria-hidden="true" />
 
-        {/* Layer 1: Behind the subject - "Coming" passes through the back in black */}
-        <div className="headline-layer headline-back" aria-hidden="true">
-          <span className="word-coming">Coming</span>
-          <span className="word-space">&nbsp;</span>
-          <span className="word-soon-ghost">Soon</span>
-        </div>
+        {/* The single H1 headline in all black, sitting in depth behind the subject */}
+        <h1 className="headline">Coming Soon</h1>
 
-        {/* Subject: Cutout portrait anchored at z-index 2 */}
+        {/* Subject: Seamlessly blended portrait in front at z-index 2 */}
         <div className="subject">
           <Image
             src={portrait}
             alt={`Portrait of ${site.fullName}, ${site.jobTitle}, in a grey pinstripe suit with a purple tie`}
             fill
             priority
-            quality={90}
+            quality={92}
             sizes="(max-width: 639px) 145vw, (max-width: 1023px) 110vh, 100vh"
             className="subject-img"
           />
         </div>
-
-        {/* Layer 2: In front of the subject - single H1 landmark with half-white/half-black "Soon" */}
-        <h1 className="headline-layer headline-front">
-          <span className="word-coming-ghost" aria-hidden="true">Coming</span>
-          <span className="word-space" aria-hidden="true">&nbsp;</span>
-          <span className="word-soon-front">Soon</span>
-        </h1>
 
         {/* Visually-hidden descriptive text for screen readers & crawlers */}
         <p className="sr-only">{site.description}</p>

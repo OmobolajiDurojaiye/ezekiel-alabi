@@ -72,7 +72,7 @@ body {
   justify-content: center;
 }
 
-/* Atmospheric glow in brand pink/purple */
+/* Atmospheric ambient glow behind the subject */
 .glow {
   position: absolute;
   z-index: 0;
@@ -83,9 +83,9 @@ body {
   transform: translate(-50%, -40%);
   background: radial-gradient(
     closest-side,
-    rgba(229, 160, 253, 0.42) 0%,
-    rgba(153, 0, 204, 0.22) 50%,
-    transparent 78%
+    rgba(229, 160, 253, 0.40) 0%,
+    rgba(153, 0, 204, 0.20) 50%,
+    transparent 80%
   );
   filter: blur(85px);
   pointer-events: none;
@@ -103,7 +103,40 @@ body {
   }
 }
 
-/* Subject: transparent cutout portrait, bottom-anchored at z-index 2 */
+/* Headline: pure all-black, sitting behind the subject (z-index: 1) */
+.headline {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 57%;
+  transform: translateY(-50%);
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  font-family: var(--font-geist);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  font-size: clamp(3rem, 13vw, 16.5rem);
+  color: #0a0a0a;
+  pointer-events: auto;
+  user-select: text;
+  animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-50% + 24px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
+
+/* Subject: portrait anchored at bottom (z-index: 2) seamlessly blending with site */
 .subject {
   position: absolute;
   z-index: 2;
@@ -118,79 +151,8 @@ body {
 .subject-img {
   object-fit: cover;
   object-position: center bottom;
-}
-
-/* ── Layered Headline: Back (z-index 1) and Front (z-index 3) ── */
-.headline-layer {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 57%;
-  transform: translateY(-50%);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  white-space: nowrap;
-  font-family: var(--font-geist);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
-  font-size: clamp(3rem, 13vw, 16.5rem);
-  user-select: text;
-  pointer-events: none;
-}
-
-/* Back layer (passes behind Ezekiel's shoulder) */
-.headline-back {
-  z-index: 1;
-  color: #0a0a0a;
-  animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.word-coming {
-  color: #0a0a0a;
-}
-
-.word-soon-ghost {
-  visibility: hidden;
-}
-
-/* Front layer (passes in front of Ezekiel's suit) */
-.headline-front {
-  z-index: 3;
-  animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.word-coming-ghost {
-  visibility: hidden;
-}
-
-.word-soon-front {
-  display: inline-block;
-  /* Half-half: white over the suit (left), black over white background (right) */
-  background: linear-gradient(
-    90deg,
-    #ffffff 0%,
-    #ffffff 36%,
-    #0a0a0a 46%,
-    #0a0a0a 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.25));
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(calc(-50% + 24px));
-  }
-  to {
-    opacity: 1;
-    transform: translateY(-50%);
-  }
+  -webkit-mask-image: radial-gradient(ellipse 75% 92% at 50% 60%, #000 68%, transparent 100%);
+  mask-image: radial-gradient(ellipse 75% 92% at 50% 60%, #000 68%, transparent 100%);
 }
 
 /* ── Mobile ────────────────────────────────────── */
@@ -200,37 +162,17 @@ body {
     width: 145vw;
   }
 
-  .headline-layer {
-    flex-direction: column;
+  .headline {
+    white-space: normal;
     top: 64%;
     font-size: clamp(3.4rem, 21vw, 6.8rem);
     line-height: 0.88;
     padding-inline: 4vw;
   }
-
-  .word-space {
-    display: none;
-  }
-
-  /* On mobile: Soon sits right across the center chest */
-  .word-soon-front {
-    background: linear-gradient(
-      90deg,
-      #0a0a0a 0%,
-      #0a0a0a 18%,
-      #ffffff 30%,
-      #ffffff 70%,
-      #0a0a0a 82%,
-      #0a0a0a 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .headline-layer,
+  .headline,
   .glow {
     animation: none;
   }
