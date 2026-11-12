@@ -1,6 +1,6 @@
 import Image from "next/image";
 import logo from "@/assets/alabi-logo.png";
-import portrait from "@/assets/alabi-portrait.jpg";
+import portrait from "@/assets/alabi-portrait.png";
 import { JsonLd } from "@/components/JsonLd";
 import { site } from "@/lib/site";
 
@@ -15,7 +15,7 @@ export default function Home() {
               "@type": "WebSite",
               "@id": `${site.url}/#website`,
               url: site.url,
-              name: site.brand,
+              name: site.fullName,
               description: site.description,
               inLanguage: "en",
             },
@@ -36,15 +36,18 @@ export default function Home() {
       <header className="site-header">
         <Image
           src={logo}
-          alt={site.brand}
+          alt={site.fullName}
           priority
           className="logo"
-          sizes="180px"
+          sizes="280px"
         />
       </header>
 
       <main className="hero">
         <div className="glow" aria-hidden="true" />
+
+        {/* The single h1 landmark placed in layered depth */}
+        <h1 className="headline">Coming Soon</h1>
 
         <div className="subject">
           <Image
@@ -52,16 +55,11 @@ export default function Home() {
             alt={`Portrait of ${site.fullName}, ${site.jobTitle}, in a grey pinstripe suit with a purple tie`}
             fill
             priority
-            quality={85}
-            sizes="(max-width: 639px) 150vw, (max-width: 1023px) 110vh, 100vh"
+            quality={90}
+            sizes="(max-width: 639px) 145vw, (max-width: 1023px) 110vh, 100vh"
             className="subject-img"
           />
         </div>
-
-        <div className="scrim" aria-hidden="true" />
-
-        {/* The single h1 landmark */}
-        <h1 className="headline">Coming Soon</h1>
 
         {/* Visually-hidden descriptive text for screen readers & crawlers */}
         <p className="sr-only">{site.description}</p>

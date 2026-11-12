@@ -3,13 +3,13 @@ import { site } from "@/lib/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: site.brand,
-    short_name: site.brand,
+    name: site.fullName,
+    short_name: site.fullName,
     description: site.description,
     start_url: "/",
     display: "standalone",
-    background_color: "#000000",
-    theme_color: "#000000",
+    background_color: "#ffffff",
+    theme_color: "#ffffff",
     icons: [
       {
         src: "/icon.png",

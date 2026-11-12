@@ -3,90 +3,74 @@ import numpy as np
 import shutil
 
 W, H = 1200, 630
-og = Image.new("RGBA", (W, H), (0, 0, 0, 255))
+og = Image.new("RGB", (W, H), (255, 255, 255))
 
-# Create glow
-glow_layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-glow_draw = ImageDraw.Draw(glow_layer)
-# Radial gradient for glow behind head/shoulders
-cx, cy = W // 2, int(H * 0.45)
-max_r = 350
-for r in range(max_r, 0, -5):
-    t = 1.0 - (r / max_r)
-    alpha = int(60 * (t ** 1.5))
-    # blend from pink (229, 160, 253) to purple (153, 0, 204)
+# Atmospheric soft glow
+glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+gd = ImageDraw.Draw(glow)
+cx, cy = W // 2, int(H * 0.42)
+for r in range(350, 0, -5):
+    t = 1.0 - (r / 350)
+    alpha_val = int(55 * (t ** 1.8))
     cr = int(229 * (1 - t) + 153 * t)
     cg = int(160 * (1 - t) + 0 * t)
     cb = int(253 * (1 - t) + 204 * t)
-    glow_draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(cr, cg, cb, alpha))
+    gd.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(cr, cg, cb, alpha_val))
 
-glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(35))
-og.paste(glow_layer, (0, 0), glow_layer)
+glow = glow.filter(ImageFilter.GaussianBlur(35))
+og.paste(glow, (0, 0), glow)
 
-# Paste portrait
-portrait = Image.open("assets/alabi-portrait.jpg").convert("RGBA")
-# Scale portrait so height fits nicely in 630 (say 580px tall)
-target_h = int(H * 0.95)
-scale = target_h / portrait.height
-target_w = int(portrait.width * scale)
-portrait_scaled = portrait.resize((target_w, target_h), Image.Resampling.LANCZOS)
+# Headline 'Coming Soon' behind subject
+font_sans = ImageFont.truetype("assets/fonts/InterTight-Variable.ttf", 150)
+cd = ImageDraw.Draw(og)
+bbox_cs = cd.textbbox((0, 0), "Coming Soon", font=font_sans)
+csw = bbox_cs[2] - bbox_cs[0]
+csx = (W - csw) // 2
+csy = int(H * 0.52)
+cd.text((csx, csy), "Coming Soon", font=font_sans, fill=(15, 23, 42))
 
-# Apply feather mask to portrait edges
-p_arr = np.asarray(portrait_scaled).astype(np.float32)
-yy, xx = np.indices((target_h, target_w))
-# center of mask
-norm_x = (xx - target_w / 2) / (target_w / 2)
-norm_y = (yy - target_h * 0.5) / (target_h * 0.5)
-dist = (norm_x ** 2) / (0.75 ** 2) + (norm_y ** 2) / (0.95 ** 2)
-mask = np.clip(1.0 - (dist - 0.4) / 0.6, 0.0, 1.0) * 255
-p_rgba = p_arr.copy()
-p_rgba[..., 3] = np.minimum(p_rgba[..., 3], mask)
-portrait_feathered = Image.fromarray(p_rgba.astype(np.uint8), "RGBA")
-
+# Center bottom-anchored portrait
+cutout = Image.open("assets/alabi-portrait.png")
+pw, ph = cutout.size
+target_h = int(H * 0.96)
+target_w = int(pw * (target_h / ph))
+p_resized = cutout.resize((target_w, target_h), Image.Resampling.LANCZOS)
 px = (W - target_w) // 2
 py = H - target_h
-og.paste(portrait_feathered, (px, py), portrait_feathered)
+og.paste(p_resized, (px, py), p_resized)
 
-# Paste logo top-left
-logo = Image.open("assets/alabi-logo.png").convert("RGBA")
-# display height ~ 36px in 630p
-logo_h = 42
-logo_w = int(logo.width * (logo_h / logo.height))
-logo_scaled = logo.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
-og.paste(logo_scaled, (56, 48), logo_scaled)
-
-# Add "Coming Soon" headline text
-# Look for a clean system sans-serif font or fallback
-draw = ImageDraw.Draw(og)
-font = None
-candidate_fonts = [
-    "C:/Windows/Fonts/Inter-Medium.ttf",
-    "C:/Windows/Fonts/Inter.ttf",
-    "C:/Windows/Fonts/segoeui.ttf",
-    "C:/Windows/Fonts/arial.ttf",
-]
-for fpath in candidate_fonts:
-    try:
-        font = ImageFont.truetype(fpath, 110)
-        break
-    except Exception:
-        continue
-
-if font is None:
-    font = ImageFont.load_default()
-
-text = "Coming Soon"
-bbox = draw.textbbox((0, 0), text, font=font)
-tw = bbox[2] - bbox[0]
-th = bbox[3] - bbox[1]
-tx = (W - tw) // 2
-ty = int(H * 0.58)
-
-# subtle shadow for text legibility
-draw.text((tx, ty + 2), text, font=font, fill=(0, 0, 0, 180))
-draw.text((tx, ty), text, font=font, fill=(255, 255, 255, 255))
+# Logo top-left
+logo = Image.open("assets/alabi-logo.png")
+logo_disp_h = 42
+logo_disp_w = int(logo.width * (logo_disp_h / logo.height))
+l_resized = logo.resize((logo_disp_w, logo_disp_h), Image.Resampling.LANCZOS)
+og.paste(l_resized, (56, 44), l_resized)
 
 og.save("app/opengraph-image.png", optimize=True)
 shutil.copy("app/opengraph-image.png", "app/twitter-image.png")
 shutil.copy("app/opengraph-image.png", "public/og.png")
-print("Saved opengraph-image.png and twitter-image.png (1200x630)")
+print("Saved white-themed opengraph-image.png and twitter-image.png (1200x630)")
+
+# Generate icons
+# Square canvas with monogram / mark
+icon_canvas = Image.new("RGB", (512, 512), (255, 255, 255))
+ic_draw = ImageDraw.Draw(icon_canvas)
+# Subtle brand gradient circle
+ic_draw.ellipse([24, 24, 488, 488], fill=(250, 245, 255), outline=(229, 160, 253), width=6)
+# Paste logo scaled inside
+lw = 420
+lh = int(logo.height * (lw / logo.width))
+l_icon = logo.resize((lw, lh), Image.Resampling.LANCZOS)
+icon_canvas.paste(l_icon, ((512 - lw) // 2, (512 - lh) // 2), l_icon)
+
+icon_canvas.save("public/icon.png", optimize=True)
+icon_canvas.save("app/icon.png", optimize=True)
+
+apple_icon = icon_canvas.resize((180, 180), Image.Resampling.LANCZOS)
+apple_icon.save("public/apple-icon.png", optimize=True)
+apple_icon.save("app/apple-icon.png", optimize=True)
+
+fav = icon_canvas.resize((32, 32), Image.Resampling.LANCZOS)
+fav.save("public/favicon.ico", format="ICO", sizes=[(32, 32), (16, 16)])
+fav.save("app/favicon.ico", format="ICO", sizes=[(32, 32), (16, 16)])
+print("Updated all icons for white theme!")
